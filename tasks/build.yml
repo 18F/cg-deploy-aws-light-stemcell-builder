@@ -1,0 +1,21 @@
+---
+platform: linux
+image_resource:
+  type: docker-image
+  source: {repository: boshcpi/aws-light-stemcell-builder}
+inputs:
+- name: builder-src
+- name: builder-config
+- name: input-stemcell
+outputs:
+- name: light-stemcell
+run:
+  path: builder-config/tasks/build.sh
+params:
+  ami_description: replace-me
+  ami_virtualization_type: replace-me
+  ami_visibility: replace-me
+  ami_region: replace-me
+  ami_access_key: replace-me
+  ami_secret_key: replace-me
+  ami_bucket_name: replace-me

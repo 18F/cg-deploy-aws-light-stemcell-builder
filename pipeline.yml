@@ -1,0 +1,65 @@
+---
+jobs:
+- name: test-unit
+  serial: true
+  plan:
+  - get: builder-src
+    trigger: true
+  - task: test
+    file: builder-src/ci/tasks/test-unit.yml
+
+- name: publish-ubuntu-hvm
+  serial: true
+  plan:
+  - aggregate:
+    - get: builder-src
+      passed: [test-unit]
+    - get: builder-config
+  - get: input-stemcell
+    resource: ubuntu-stemcell
+    version: every
+    trigger: true
+  - task: build
+    file: builder-config/tasks/build.yml
+    params:
+      ami_description: {{publish_ami_description}}
+      ami_virtualization_type: hvm
+      ami_visibility: {{publish_ami_visibility}}
+      ami_region: {{publish_region}}
+      ami_access_key: {{publish_access_key}}
+      ami_secret_key: {{publish_secret_key}}
+      ami_bucket_name: {{publish_bucket}}
+  - put: light-stemcell
+    params:
+      file: light-stemcell/light-bosh-stemcell-*.tgz
+
+resources:
+- name: builder-src
+  type: git
+  source:
+    uri: {{builder_src_git_url}}
+    branch: {{builder_src_git_branch}}
+
+- name: builder-config
+  type: git
+  source:
+    uri: {{builder_config_git_url}}
+    branch: {{builder_config_git_branch}}
+
+- name: ubuntu-stemcell
+  type: s3
+  source:
+    regexp: bosh-stemcell/aws/bosh-stemcell-([0-9\.]+)-aws-xen-ubuntu-trusty-go_agent\.tgz
+    cloudfront_url: https://d26ekeud912fhb.cloudfront.net
+    bucket: bosh-jenkins-artifacts
+    region_name: us-east-1
+
+- name: light-stemcell
+  type: s3
+  source:
+    regexp: light-bosh-stemcell-([\d\.]+)-.*\.tgz
+    access_key_id: {{output_bucket_access_key}}
+    secret_access_key: {{output_bucket_secret_key}}
+    bucket: {{output_bucket}}
+    region_name: {{output_region}}
+    server_side_encryption: AES256
