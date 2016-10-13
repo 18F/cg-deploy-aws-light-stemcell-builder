@@ -29,6 +29,22 @@ jobs:
       ami_access_key: {{publish_access_key}}
       ami_secret_key: {{publish_secret_key}}
       ami_bucket_name: {{publish_bucket}}
+    on_failure:
+      put: slack
+      params: &slack-params
+        text: |
+          :x: FAILED to build light stemcell
+          <$ATC_EXTERNAL_URL/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+        channel: {{slack-channel}}
+        username: {{slack-username}}
+        icon_url: {{slack-icon-url}}
+    on_success:
+      put: slack
+      params:
+        <<: *slack-params
+        text: |
+          :white_check_mark: Successfully built light stemcell
+          <$ATC_EXTERNAL_URL/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
   - put: light-stemcell
     params:
       file: light-stemcell/light-bosh-stemcell-*.tgz
@@ -63,3 +79,14 @@ resources:
     bucket: {{output_bucket}}
     region_name: {{output_region}}
     server_side_encryption: AES256
+
+- name: slack
+  type: slack-notification
+  source:
+    url: {{slack-webhook-url}}
+
+resource_types:
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
