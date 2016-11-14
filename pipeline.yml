@@ -17,7 +17,6 @@ jobs:
     - get: builder-config
   - get: input-stemcell
     resource: ubuntu-stemcell
-    version: every
     trigger: true
   - task: build
     file: builder-config/tasks/build.yml
@@ -38,9 +37,9 @@ jobs:
       text: |
         :x: FAILED to build light stemcell
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-      channel: {{slack-channel}}
-      username: {{slack-username}}
-      icon_url: {{slack-icon-url}}
+      channel: {{slack_channel}}
+      username: {{slack_username}}
+      icon_url: {{slack_icon_url}}
   on_success:
     put: slack
     params:
@@ -81,7 +80,7 @@ resources:
 - name: slack
   type: slack-notification
   source:
-    url: {{slack-webhook-url}}
+    url: {{slack_webhook_url}}
 
 resource_types:
 - name: slack-notification
