@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex -o pipefail
+set -e -o pipefail
 
 builder_path=${PWD}/builder-src
 stemcell_path=${PWD}/input-stemcell/*.tgz
@@ -39,9 +39,6 @@ cat > $CONFIG_PATH << EOF
   ]
 }
 EOF
-
-echo "Configuration:"
-cat $CONFIG_PATH
 
 extracted_stemcell_dir=${PWD}/extracted-stemcell
 mkdir -p ${extracted_stemcell_dir}
