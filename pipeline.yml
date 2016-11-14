@@ -63,12 +63,10 @@ resources:
     branch: {{builder_config_git_branch}}
 
 - name: ubuntu-stemcell
-  type: s3
+  type: bosh-io-stemcell-version-family
   source:
-    regexp: bosh-stemcell/aws/bosh-stemcell-([0-9\.]+)-aws-xen-ubuntu-trusty-go_agent\.tgz
-    cloudfront_url: https://d26ekeud912fhb.cloudfront.net
-    bucket: bosh-jenkins-artifacts
-    region_name: us-east-1
+    name: bosh-aws-xen-ubuntu-trusty-go_agent
+    force_regular: true
 
 - name: light-stemcell
   type: s3
@@ -90,3 +88,9 @@ resource_types:
   type: docker-image
   source:
     repository: cfcommunity/slack-notification-resource
+
+- name: bosh-io-stemcell-version-family
+  type: docker-image
+  source:
+    repository: boshcpi/bosh-io-stemcell-resource
+    tag: PR-version-family
