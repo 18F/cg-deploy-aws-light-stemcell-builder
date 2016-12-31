@@ -8,6 +8,9 @@ output_path=${PWD}/light-stemcell/
 
 source ${builder_path}/ci/tasks/utils.sh
 
+ami_encrypted=${ami_encrypted:-false}
+ami_kms_key_id=${ami_kms_key_id:-}
+
 : ${ami_description:?}
 : ${ami_virtualization_type:?}
 : ${ami_visibility:?}
@@ -25,6 +28,8 @@ cat > $CONFIG_PATH << EOF
   "ami_configuration": {
     "description":          "$ami_description",
     "virtualization_type":  "$ami_virtualization_type",
+    "encrypted":            "$ami_encrypted",
+    "kms_key_id":           "$ami_kms_key_id",
     "visibility":           "$ami_visibility"
   },
   "ami_regions": [
