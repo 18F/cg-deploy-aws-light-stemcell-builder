@@ -15,6 +15,7 @@ source ${builder_path}/ci/tasks/utils.sh
 : ${ami_access_key:?}
 : ${ami_secret_key:?}
 : ${ami_bucket_name:?}
+: ${ami_server_side_encryption:?}
 
 echo "Building light stemcell"
 
@@ -34,7 +35,8 @@ cat > $CONFIG_PATH << EOF
         "access_key":       "$ami_access_key",
         "secret_key":       "$ami_secret_key"
       },
-      "bucket_name":        "$ami_bucket_name"
+      "bucket_name":        "$ami_bucket_name",
+      "server_side_encryption": "$ami_server_side_encryption"
     }
   ]
 }

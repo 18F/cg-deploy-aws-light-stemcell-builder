@@ -28,6 +28,7 @@ jobs:
       ami_access_key: {{publish_access_key}}
       ami_secret_key: {{publish_secret_key}}
       ami_bucket_name: {{publish_bucket}}
+      ami_server_side_encryption: "true"
   - put: light-stemcell
     params:
       file: light-stemcell/light-bosh-stemcell-*.tgz
