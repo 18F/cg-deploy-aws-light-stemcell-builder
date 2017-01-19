@@ -47,7 +47,7 @@ mkdir -p ${extracted_stemcell_dir}
 tar -C ${extracted_stemcell_dir} -xf ${stemcell_path}
 tar -xf ${extracted_stemcell_dir}/image
 
-original_stemcell_name="$(basename ${stemcell_path})"
+original_stemcell_name="$(basename $(cat ${PWD}/input-stemcell/url))"
 light_stemcell_name="light-${original_stemcell_name}"
 
 if [ "${ami_virtualization_type}" = "hvm" ]; then
