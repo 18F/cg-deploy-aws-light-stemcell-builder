@@ -23,6 +23,8 @@ jobs:
     params:
       ami_description: {{publish_ami_description}}
       ami_virtualization_type: hvm
+      ami_encrypted: {{publish_ami_encrypted}}
+      ami_kms_key_id: {{publish_ami_kms_key_id}}
       ami_visibility: {{publish_ami_visibility}}
       ami_region: {{publish_region}}
       ami_access_key: {{publish_access_key}}
