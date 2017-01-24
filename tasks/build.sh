@@ -18,6 +18,7 @@ ami_kms_key_id=${ami_kms_key_id:-}
 : ${ami_access_key:?}
 : ${ami_secret_key:?}
 : ${ami_bucket_name:?}
+: ${ami_server_side_encryption:?}
 
 echo "Building light stemcell"
 
@@ -39,7 +40,8 @@ cat > $CONFIG_PATH << EOF
         "access_key":       "$ami_access_key",
         "secret_key":       "$ami_secret_key"
       },
-      "bucket_name":        "$ami_bucket_name"
+      "bucket_name":        "$ami_bucket_name",
+      "server_side_encryption": "$ami_server_side_encryption"
     }
   ]
 }
@@ -50,7 +52,7 @@ mkdir -p ${extracted_stemcell_dir}
 tar -C ${extracted_stemcell_dir} -xf ${stemcell_path}
 tar -xf ${extracted_stemcell_dir}/image
 
-original_stemcell_name="$(basename ${stemcell_path})"
+original_stemcell_name="$(basename $(cat ${PWD}/input-stemcell/url))"
 light_stemcell_name="light-${original_stemcell_name}"
 
 if [ "${ami_virtualization_type}" = "hvm" ]; then

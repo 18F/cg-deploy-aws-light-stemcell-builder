@@ -30,6 +30,7 @@ jobs:
       ami_access_key: {{publish_access_key}}
       ami_secret_key: {{publish_secret_key}}
       ami_bucket_name: {{publish_bucket}}
+      ami_server_side_encryption: AES256
   - put: light-stemcell
     params:
       file: light-stemcell/light-bosh-stemcell-*.tgz
@@ -64,7 +65,7 @@ resources:
     branch: {{builder_config_git_branch}}
 
 - name: ubuntu-stemcell
-  type: bosh-io-stemcell-version-family
+  type: bosh-io-stemcell
   source:
     name: bosh-aws-xen-ubuntu-trusty-go_agent
     force_regular: true
@@ -89,9 +90,3 @@ resource_types:
   type: docker-image
   source:
     repository: cfcommunity/slack-notification-resource
-
-- name: bosh-io-stemcell-version-family
-  type: docker-image
-  source:
-    repository: boshcpi/bosh-io-stemcell-resource
-    tag: PR-version-family
