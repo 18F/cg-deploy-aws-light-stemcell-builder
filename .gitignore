@@ -1,0 +1,5 @@
+# Ignore fun directories
+tmp/
+
+# Ignore Concourse stuff
+credentials.yml
