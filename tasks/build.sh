@@ -35,7 +35,8 @@ cat > $CONFIG_PATH << EOF
     {
       "name":               "$ami_region",
       "bucket_name":        "$ami_bucket_name",
-      "server_side_encryption": "$ami_server_side_encryption"
+      "server_side_encryption": "$ami_server_side_encryption",
+      "credentials_source": "env_or_profile"
     }
   ]
 }
