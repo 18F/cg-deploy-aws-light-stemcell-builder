@@ -19,6 +19,8 @@ jobs:
     resource: ubuntu-stemcell
     trigger: true
   - task: build
+    tags:
+    - iaas
     file: builder-config/tasks/build.yml
     params:
       ami_description: {{publish_ami_description}}
@@ -27,11 +29,11 @@ jobs:
       ami_kms_key_id: {{publish_ami_kms_key_id}}
       ami_visibility: {{publish_ami_visibility}}
       ami_region: {{publish_region}}
-      ami_access_key: {{publish_access_key}}
-      ami_secret_key: {{publish_secret_key}}
       ami_bucket_name: {{publish_bucket}}
       ami_server_side_encryption: AES256
   - put: light-stemcell
+    tags:
+    - iaas
     params:
       file: light-stemcell/light-bosh-stemcell-*.tgz
   on_failure:
@@ -71,11 +73,9 @@ resources:
     force_regular: true
 
 - name: light-stemcell
-  type: s3
+  type: s3-iam
   source:
     regexp: light-bosh-stemcell-([\d\.]+)-.*\.tgz
-    access_key_id: {{output_bucket_access_key}}
-    secret_access_key: {{output_bucket_secret_key}}
     bucket: {{output_bucket}}
     region_name: {{output_region}}
     server_side_encryption: AES256
@@ -90,3 +90,7 @@ resource_types:
   type: docker-image
   source:
     repository: cfcommunity/slack-notification-resource
+- name: s3-iam
+  type: docker-image
+  source:
+    repository: 18fgsa/s3-resource

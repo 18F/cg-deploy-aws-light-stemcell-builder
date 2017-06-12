@@ -15,8 +15,6 @@ ami_kms_key_id=${ami_kms_key_id:-}
 : ${ami_virtualization_type:?}
 : ${ami_visibility:?}
 : ${ami_region:?}
-: ${ami_access_key:?}
-: ${ami_secret_key:?}
 : ${ami_bucket_name:?}
 : ${ami_server_side_encryption:?}
 
@@ -36,12 +34,9 @@ cat > $CONFIG_PATH << EOF
   "ami_regions": [
     {
       "name":               "$ami_region",
-      "credentials": {
-        "access_key":       "$ami_access_key",
-        "secret_key":       "$ami_secret_key"
-      },
       "bucket_name":        "$ami_bucket_name",
-      "server_side_encryption": "$ami_server_side_encryption"
+      "server_side_encryption": "$ami_server_side_encryption",
+      "credentials_source": "env_or_profile"
     }
   ]
 }
